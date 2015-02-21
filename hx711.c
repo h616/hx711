@@ -289,7 +289,7 @@ EXIT:
 
 static void __exit mod_exit(void) 
 {
-	printk(KERN_INFO "hx7111 module being unloaded\n");
+	printk(KERN_INFO "hx711 module being unloaded\n");
 
 	gpio_free(dout_pin);
 	gpio_free(pd_sck_pin);
