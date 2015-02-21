@@ -196,7 +196,7 @@ ATTRIBUTE_GROUPS(hx711);	//contruct attribute_groups *hx711_groups[]
 
 static const struct of_device_id hx711_dt_ids[] = {
 	{ .compatible = "avia,hx711", },
-	{ /* sentinel */ }
+	{}
 };
 
 MODULE_DEVICE_TABLE(of, hx711_dt_ids);
