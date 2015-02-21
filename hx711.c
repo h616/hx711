@@ -26,8 +26,8 @@ struct raw_gram_map {
 static struct raw_gram_map raw_gram_maps[NUM_OF_CALIB_POINTS];
 static int power, config, raw;
 // Hardcode the gpio pins for now...
-static unsigned int dout_pin = 7;
-static unsigned int pd_sck_pin = 8;
+static unsigned int dout_pin = 23;
+static unsigned int pd_sck_pin = 24;
 static int irq;
 
 
