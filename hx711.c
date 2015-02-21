@@ -16,14 +16,6 @@ enum {
 	CONFIG_CHANNEL_A_GAIN_64,
 };
 
-struct raw_gram_map {
-	int raw;
-	int gram;
-};
-
-#define NUM_OF_CALIB_POINTS	5
-
-static struct raw_gram_map raw_gram_maps[NUM_OF_CALIB_POINTS];
 static int power, config, raw;
 // Hardcode the gpio pins for now...
 static unsigned int dout_pin = 23;
@@ -169,28 +161,6 @@ static ssize_t config_store(struct device_driver *drv, const char *buf, size_t c
 
 static DRIVER_ATTR_RW(config);
 
-static ssize_t calib_store(struct device_driver *drv, const char *buf, size_t count)
-{
-        sscanf(buf, "%d %d %d %d %d %d %d %d %d %d", 	&raw_gram_maps[0].raw, &raw_gram_maps[0].gram,\
-							&raw_gram_maps[1].raw, &raw_gram_maps[1].gram,\
-							&raw_gram_maps[2].raw, &raw_gram_maps[2].gram,\
-							&raw_gram_maps[3].raw, &raw_gram_maps[3].gram,\
-							&raw_gram_maps[4].raw, &raw_gram_maps[4].gram);
-
-        return count;
-}
-
-static ssize_t calib_show(struct device_driver *drv, char *buf)
-{
-        return sprintf(buf, "%d %d %d %d %d %d %d %d %d %d\n", 	raw_gram_maps[0].raw, raw_gram_maps[0].gram,\
-								raw_gram_maps[1].raw, raw_gram_maps[1].gram,\
-								raw_gram_maps[2].raw, raw_gram_maps[2].gram,\
-								raw_gram_maps[3].raw, raw_gram_maps[3].gram,\
-								raw_gram_maps[4].raw, raw_gram_maps[4].gram);
-}
-
-static DRIVER_ATTR_RW(calib);
-
 static ssize_t power_show(struct device_driver *drv, char *buf)
 {
         return sprintf(buf, "%d\n", power);
@@ -208,30 +178,6 @@ static ssize_t power_store(struct device_driver *drv, const char *buf, size_t co
 
 static DRIVER_ATTR_RW(power);	//struct driver_attribute driver_attr_power
 
-static ssize_t value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
-{
-#if 0	// Do the interpolation in user space
-	int l, h, key, value;
-
-	l = 0;
-	h = NUM_OF_CALIB_POINTS - 1; 
-	key = raw;
-
-	// binary search
-	while (h - l > 1) {
-		if (key <= raw_gram_maps[h].raw)
-			h = (l + h) / 2;
-		else 
-			l = (l + h) / 2;
-	}
-
-	value = raw_gram_maps(l).gram + (raw_gram_maps(h).gram - raw_gram_maps(l).gram) / (  
-#endif
-        return sprintf(buf, "%d\n", 0);
-}
-
-static DRIVER_ATTR_RO(value);
-
 static ssize_t raw_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
 {
         return sprintf(buf, "%d\n", raw);
@@ -241,10 +187,8 @@ static DRIVER_ATTR_RO(raw);
 
 static struct attribute *hx711_attrs[] = {
 	&driver_attr_power.attr,
-	&driver_attr_value.attr,
 	&driver_attr_raw.attr,
 	&driver_attr_config.attr,
-	&driver_attr_calib.attr,
 	NULL
 };
 
