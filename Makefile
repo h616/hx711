@@ -1,4 +1,4 @@
-KERNELDIR := /lib/modules/3.12.28-2-ARCH/build 
+KERNELDIR := /usr/src/linux 
 PWD := $(shell pwd)
 
 .PHONY: clean
