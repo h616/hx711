@@ -34,7 +34,7 @@ static int of_get_gpio_pins(struct device_node *np, unsigned int *_dout_pin, uns
         *_pd_sck_pin = of_get_gpio(np, 1);
  
 	if (!gpio_is_valid(*_dout_pin) || !gpio_is_valid(*_pd_sck_pin)) {
-		pr_info("Invalid GPIO pins %d and %d\n", *_dout_pin, *_pd_sck_pin);
+		pr_err("Invalid GPIO pins %d and %d\n", *_dout_pin, *_pd_sck_pin);
 		return -ENODEV;
 	}
  
@@ -49,7 +49,7 @@ static int hx711_probe(struct platform_device *pdev)
 	if (!ret) {
 		ret = gpio_request_one(dout_pin, GPIOF_DIR_IN, "hx711_data") || gpio_request_one(pd_sck_pin, GPIOF_DIR_IN, "hx711_clk");
 		if (ret) {
-			pr_info("GPIO request failed\n");
+			pr_err("GPIO request failed\n");
 			gpio_free(dout_pin);
 			gpio_free(pd_sck_pin);
 			
@@ -119,21 +119,21 @@ static int __init hx711_init(void)
 
 	ret = gpio_request_one(dout_pin, GPIOF_DIR_IN, "hx711_data") || gpio_request_one(pd_sck_pin, GPIOF_OUT_INIT_HIGH, "hx711_clk");
 	if (ret) {
-		pr_info("GPIO request failed\n");
+		pr_err("GPIO request failed\n");
 		ret = -EINVAL;
 		goto EXIT;
 	}
 
 	irq = gpio_to_irq(dout_pin);
 	if (irq < 0) {
-		pr_info("IRQ number no available\n");
+		pr_err("IRQ number no available\n");
 		ret = -EINVAL;
 		goto CLEANUP;
 	}
 
 	ret = request_threaded_irq(irq, NULL, dout_irq_handler, IRQF_ONESHOT | IRQF_TRIGGER_FALLING, "hx711", NULL);
 	if (ret) {
-		pr_info("IRQ request failed\n");
+		pr_err("IRQ request failed\n");
 		goto CLEANUP;
 	}
 	disable_irq(irq);
@@ -220,12 +220,12 @@ static int __init mod_init(void)
 
 	ret = hx711_init();
 	if (ret) {
-		pr_info("hx711 init failed\n");
+		pr_err("hx711 init failed\n");
 		goto EXIT;
 	}
 	ret = platform_driver_register(&hx711_driver);
 	if (ret)
-		pr_info("hx711 driver registration failed\n");
+		pr_err("hx711 driver registration failed\n");
 
 EXIT:
 	return ret;
