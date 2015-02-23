@@ -1,3 +1,14 @@
+/*
+* This driver supports the HX711 24-Bit Analog-to-Digital Converter (ADC) for Weigh Scales from AVIA Semiconductor. 
+* A datasheet is available from this website:
+* http://www.dfrobot.com/image/data/SEN0160/hx711_english.pdf
+*
+* A weight measurement is issued by reading from .../hx711/raw.
+* The output 24 bits of data is in 2’s complement format. When 
+* input differential signal goes out of the 24 bit range, the 
+* output data will be saturated at 800000h (MIN) or 7FFFFFh (MAX)
+*/
+
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/gpio.h>
